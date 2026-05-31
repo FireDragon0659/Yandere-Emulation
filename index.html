@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理测试</title>
+    <style>
+        @keyframes jump {
+            0% {
+                opacity: 0;
+                font-size: 10px;
+            }
+            9.9% {
+                opacity: 0;
+                font-size: 10px;
+            }
+            10% {
+                opacity: 1;
+                font-size: 10px;
+            }
+            19.9% {
+                opacity: 1;
+                font-size: 10px;
+            }
+            20% {
+                opacity: 0;
+                font-size: 10px;
+            }
+            29.9% {
+                opacity: 0;
+                font-size: 10px;
+            }
+            30% {
+                opacity: 1;
+                font-size: 10px;
+            }
+            39.9% {
+                opacity: 1;
+                font-size: 10px;
+            }
+            40% {
+                opacity: 0;
+                font-size: 10px;
+            }
+            49.9% {
+                opacity: 0;
+                font-size: 10px;
+            }
+            50% {
+                opacity: 1;
+                font-size: 10px;
+            }
+            59.9% {
+                opacity: 1;
+                font-size: 20px;
+            }
+            60% {
+                opacity: 0;
+                font-size: 20px;
+            }
+            69.9% {
+                opacity: 0;
+                font-size: 20px;
+            }
+            70% {
+                opacity: 1;
+                font-size: 20px;
+            }
+            79.9% {
+                opacity: 1;
+                font-size: 20px;
+            }
+            80% {
+                opacity: 0;
+                font-size: 20px;
+            }
+            89.9% {
+                opacity: 0;
+                font-size: 20px;
+            }
+            90% {
+                opacity: 1;
+                font-size: 20px;
+            }
+            100% {
+                opacity: 1;
+                font-size: 20px;
+            }
+        }
+
+        @keyframes scare {
+            0% {
+                scale: 0.1;
+            }
+
+            100% {
+                scale: 20;
+            }
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translate(-1px, -1px);
+            }
+
+            25% {
+                transform: translate(1px, -1px);
+            }
+
+            50% {
+                transform: translate(1px, 1px);
+            }
+
+            75% {
+                transform: translate(-1px, 1px);
+            }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+
+        #root {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wild-div {
+            width: 90%;
+            max-width: 300px;
+            height: auto;
+            padding: 10px;
+            border: 1px solid red;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .normal-button {
+            margin-top: 16px;
+            background-color: red;
+            color: white;
+            padding: 4px 8px;
+            outline: none;
+            cursor: pointer;
+            border: 1px solid darkred;
+        }
+
+        .ask-area {
+            color: red;
+            width: 90%;
+            text-align: start;
+            margin-bottom: 10px;
+        }
+
+        .ans-area {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 90%;
+            height: auto;
+            margin-bottom: 8px;
+        }
+
+        .next-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 90%;
+            margin-bottom: 5px;
+        }
+
+        .select-button {
+            width: 100%;
+            padding: 12px 8px;
+            border: 1px solid red;
+            color: red;
+            text-align: start;
+            background-color: transparent;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script defer>
+        function shuffle(list) {
+            for (let i = list.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [list[i], list[j]] = [list[j], list[i]];
+            }
+        }
+        var dialog = [
+            {
+                question: "你曾在深夜独自照镜子时，发现镜中的自己嘴角比平时上扬得更厉害吗？",
+                answer: [
+                    { text: "从来没有，镜子就是镜子。", score: 0 },
+                    { text: "有过一两次，但觉得是光线问题。", score: 1 },
+                    { text: "偶尔，而且会盯着看很久。", score: 2 },
+                    { text: "经常，感觉镜中的“我”不太一样。", score: 3 },
+                    { text: "每晚都照，镜子里的我已经会对我说话了。", score: 4 }
+                ]
+            },
+            {
+                question: "如果你喜欢的人和其他异性说笑，你心里会涌出什么感觉？",
+                answer: [
+                    { text: "没什么，正常社交。", score: 0 },
+                    { text: "有点酸，但能忍。", score: 1 },
+                    { text: "仿佛有虫子在啃食心脏。", score: 2 },
+                    { text: "想用针缝上那个异性的嘴。", score: 3 },
+                    { text: "当晚就做了个小人，扎针。", score: 4 }
+                ]
+            },
+            {
+                question: "你收到过最喜欢的人送的礼物吗？如果后来他送给了别人，你会？",
+                answer: [
+                    { text: "无所谓，礼物就是礼物。", score: 0 },
+                    { text: "有点失落，但不会怎样。", score: 1 },
+                    { text: "偷偷把礼物偷回来。", score: 2 },
+                    { text: "在礼物里藏一根自己的头发诅咒。", score: 3 },
+                    { text: "我送的东西，别人碰了就要剁手。", score: 4 }
+                ]
+            },
+            {
+                question: "你会在深夜听到衣柜里有轻微的摩擦声吗？",
+                answer: [
+                    { text: "从没听过。", score: 0 },
+                    { text: "可能是老鼠。", score: 1 },
+                    { text: "偶尔会，但我开灯就没了。", score: 2 },
+                    { text: "经常听到，像指甲划木板的声音。", score: 3 },
+                    { text: "我知道那是什么，它听我的话。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经偷偷收集过喜欢的人的什么东西？",
+                answer: [
+                    { text: "没收集过，正常交流。", score: 0 },
+                    { text: "保存过聊天截图。", score: 1 },
+                    { text: "捡过他/她掉落的头发或橡皮屑。", score: 2 },
+                    { text: "保留用过的纸巾或吸管。", score: 3 },
+                    { text: "我用他剪下的指甲做了个娃娃。", score: 4 }
+                ]
+            },
+            {
+                question: "如果你的情敌突然失踪了，你第一反应是？",
+                answer: [
+                    { text: "担心，报警帮忙。", score: 0 },
+                    { text: "有点奇怪，但与我无关。", score: 1 },
+                    { text: "心里松了口气。", score: 2 },
+                    { text: "我知道他去了哪里，但我不说。", score: 3 },
+                    { text: "地下室还有空位呢。", score: 4 }
+                ]
+            },
+            {
+                question: "你做过这样的梦吗：你在一个全是镜子房间里，镜中你的眼睛流着血泪，笑着对你说“永远在一起”。",
+                answer: [
+                    { text: "从来没有。", score: 0 },
+                    { text: "有过一次，吓醒了。", score: 1 },
+                    { text: "偶尔，但觉得有趣。", score: 2 },
+                    { text: "经常做，醒来枕头上有血。", score: 3 },
+                    { text: "那不是梦，他每晚都来找我。", score: 4 }
+                ]
+            },
+            {
+                question: "你允许恋人有秘密日记或手机密码吗？",
+                answer: [
+                    { text: "允许，隐私很重要。", score: 0 },
+                    { text: "可以，但希望共享。", score: 1 },
+                    { text: "不允许，必须让我看。", score: 2 },
+                    { text: "我会趁他睡熟后复制他的SIM卡。", score: 3 },
+                    { text: "他的眼睛就是密码，我挖下来就能解。", score: 4 }
+                ]
+            },
+            {
+                question: "如果有一种仪式，需要用你自己的十年寿命换取恋人永生不离开你，你会做吗？",
+                answer: [
+                    { text: "不会，太迷信且不值。", score: 0 },
+                    { text: "犹豫，感觉不真实。", score: 1 },
+                    { text: "可能会，如果仪式是真的。", score: 2 },
+                    { text: "我已经在找巫师了。", score: 3 },
+                    { text: "我献祭了邻居家的猫，成功了。", score: 4 }
+                ]
+            },
+            {
+                question: "你家里是否有一个你从不允许任何人打开的房间/柜子？",
+                answer: [
+                    { text: "没有，全都能看。", score: 0 },
+                    { text: "有一些私人物品箱。", score: 1 },
+                    { text: "有个抽屉锁着，里面是日记。", score: 2 },
+                    { text: "有，里面是喜欢的人的照片墙和物品。", score: 3 },
+                    { text: "有，里面住着“上一个”说要离开我的人。", score: 4 }
+                ]
+            },
+            {
+                question: "你听到过不属于任何声源的耳语吗？比如“别放手”“他是我的”？",
+                answer: [
+                    { text: "从没听过。", score: 0 },
+                    { text: "可能是幻听。", score: 1 },
+                    { text: "偶尔，以为是耳鸣。", score: 2 },
+                    { text: "经常听到，而且知道是谁在说。", score: 3 },
+                    { text: "那是我的“朋友”，他帮我看着恋人。", score: 4 }
+                ]
+            },
+            {
+                question: "你会用恋人脱落的头发编成手环戴在自己手上吗？",
+                answer: [
+                    { text: "太恶心了，不会。", score: 0 },
+                    { text: "没想过，但也不会。", score: 1 },
+                    { text: "有点心动，但不敢。", score: 2 },
+                    { text: "做过，偷偷戴着。", score: 3 },
+                    { text: "我收集了三年，编了一条项链、手环和脚链。", score: 4 }
+                ]
+            },
+            {
+                question: "如果你的恋人突然说“我觉得你有时候好可怕”，你会？",
+                answer: [
+                    { text: "反思自己，尝试改变。", score: 0 },
+                    { text: "有点伤心，但会解释。", score: 1 },
+                    { text: "笑着说“你逃不掉的”。", score: 2 },
+                    { text: "把他绑起来，直到他说“不可怕”。", score: 3 },
+                    { text: "把他的嘴唇缝起来，这样他就不会说可怕的话了。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾在午夜十二点对着镜子削苹果，问“谁是我的爱人”？",
+                answer: [
+                    { text: "没做过，也不知道这个仪式。", score: 0 },
+                    { text: "听说过，但不敢试。", score: 1 },
+                    { text: "试过，但苹果皮断了。", score: 2 },
+                    { text: "试过，镜子里出现了恋人的脸。", score: 3 },
+                    { text: "我每天做，镜子里的人已经变成我了。", score: 4 }
+                ]
+            },
+            {
+                question: "你愿意为了恋人永远住在一座只有你们两人的洋馆里吗？没有信号，没有出路。",
+                answer: [
+                    { text: "不愿意，太孤独恐怖。", score: 0 },
+                    { text: "短期可以，长期不行。", score: 1 },
+                    { text: "如果他愿意，我可以试试。", score: 2 },
+                    { text: "那是我的梦想。", score: 3 },
+                    { text: "我已经买好了洋馆，锁换成了只能从外反锁的。", score: 4 }
+                ]
+            },
+            {
+                question: "你如何处理那些试图接近你恋人的追求者？",
+                answer: [
+                    { text: "相信恋人会拒绝。", score: 0 },
+                    { text: "友好地提醒。", score: 1 },
+                    { text: "散布谣言让他们远离。", score: 2 },
+                    { text: "在他们的枕头里放针。", score: 3 },
+                    { text: "他们最近都出了“意外”，真可惜。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过这样的经历：在照镜子时，发现镜子里的自己向你眨了眨眼，而你并没有动？",
+                answer: [
+                    { text: "没有，太离谱。", score: 0 },
+                    { text: "有过一次，以为眼花。", score: 1 },
+                    { text: "偶尔，但我不害怕。", score: 2 },
+                    { text: "经常，而且她和我长得越来越不一样。", score: 3 },
+                    { text: "现在镜子里的是“她”，我是替身。", score: 4 }
+                ]
+            },
+            {
+                question: "你喜欢的人如果死了，你会怎么办？",
+                answer: [
+                    { text: "悲伤，然后继续生活。", score: 0 },
+                    { text: "很长一段时间走不出来。", score: 1 },
+                    { text: "想随他而去。", score: 2 },
+                    { text: "把他的骨灰做成项链，每天都戴着。", score: 3 },
+                    { text: "没关系，我早就做好了他的标本。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经对恋人的照片做过什么奇怪的事？",
+                answer: [
+                    { text: "正常保存。", score: 0 },
+                    { text: "设成壁纸。", score: 1 },
+                    { text: "打印出来贴在床头。", score: 2 },
+                    { text: "在照片背后写下血字“永远”。", score: 3 },
+                    { text: "每天晚上亲吻照片上的眼睛，直到照片开始流泪。", score: 4 }
+                ]
+            },
+            {
+                question: "如果有一天你醒来，发现身边躺着一个和恋人一模一样的人，但他/她不会说话，不会动，只是微笑着看着你。你会？",
+                answer: [
+                    { text: "尖叫着逃跑报警。", score: 0 },
+                    { text: "以为是噩梦，继续睡。", score: 1 },
+                    { text: "拍照发网上问。", score: 2 },
+                    { text: "抱着他/她，觉得终于不会离开了。", score: 3 },
+                    { text: "这是我最完美的作品，我花了三年制作。", score: 4 }
+                ]
+            },
+            {
+                question: "你会在下雨天独自去墓地散步，并觉得那里的空气格外清新吗？",
+                answer: [
+                    { text: "从不去墓地，害怕。", score: 0 },
+                    { text: "只是路过，不会特意去。", score: 1 },
+                    { text: "偶尔会去，觉得安静。", score: 2 },
+                    { text: "经常去，喜欢读墓碑上的名字。", score: 3 },
+                    { text: "我在那里埋了“纪念品”，每周去查看。", score: 4 }
+                ]
+            },
+            {
+                question: "如果你有一本可以诅咒任何人的笔记本，你会写下谁的名字？",
+                answer: [
+                    { text: "谁都不会写，太邪恶。", score: 0 },
+                    { text: "写一个讨厌的人。", score: 1 },
+                    { text: "写下所有欺负过我的人。", score: 2 },
+                    { text: "写下恋人身边所有的异性朋友。", score: 3 },
+                    { text: "早就写满了，包括我的恋人——这样他就永远逃不掉。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经对着玩偶或人偶说过心里话，并觉得它会回应你吗？",
+                answer: [
+                    { text: "没有，那很幼稚。", score: 0 },
+                    { text: "小时候有过，后来没了。", score: 1 },
+                    { text: "偶尔会，特别是在难过的时候。", score: 2 },
+                    { text: "经常，而且我觉得它真的在听。", score: 3 },
+                    { text: "我的玩偶会在我睡着后移动位置，我们每晚都聊天。", score: 4 }
+                ]
+            },
+            {
+                question: "如果你的恋人想要离开你，你会先伤害自己还是先伤害他？",
+                answer: [
+                    { text: "都不，我会放手。", score: 0 },
+                    { text: "伤害自己来挽留。", score: 1 },
+                    { text: "两者都会考虑。", score: 2 },
+                    { text: "伤害他，让他无法离开。", score: 3 },
+                    { text: "先把他锁起来，然后在他面前伤害自己——双重束缚。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信世界上有能够“绑定灵魂”的爱情咒术吗？",
+                answer: [
+                    { text: "不信，全是迷信。", score: 0 },
+                    { text: "有点好奇，但不会尝试。", score: 1 },
+                    { text: "半信半疑，想试试看。", score: 2 },
+                    { text: "深信不疑，已经做过一次了。", score: 3 },
+                    { text: "我成功了，现在他的灵魂每晚都在我床边。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经在深夜对着恋人的照片低声说过“你是我的”吗？",
+                answer: [
+                    { text: "没有。", score: 0 },
+                    { text: "有过一次，觉得好笑。", score: 1 },
+                    { text: "偶尔，特别是生气时。", score: 2 },
+                    { text: "经常说，而且会重复直到睡着。", score: 3 },
+                    { text: "照片里的他/她也会回应我“我是你的”。", score: 4 }
+                ]
+            },
+            {
+                question: "你会故意在恋人身上留下痕迹（吻痕、抓痕）来标记主权吗？",
+                answer: [
+                    { text: "不会，尊重对方。", score: 0 },
+                    { text: "无意中可能会。", score: 1 },
+                    { text: "会，但很轻微。", score: 2 },
+                    { text: "会，而且喜欢看他遮遮掩掩的样子。", score: 3 },
+                    { text: "我用刀刻过我的名字。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“如果他不爱我，那就谁也别想得到他”的念头？",
+                answer: [
+                    { text: "从来没有。", score: 0 },
+                    { text: "一闪而过。", score: 1 },
+                    { text: "有过，但只是想想。", score: 2 },
+                    { text: "经常有，而且会计划。", score: 3 },
+                    { text: "已经执行过一次了。", score: 4 }
+                ]
+            },
+            {
+                question: "你会偷偷复制恋人的钥匙，以便随时进入他/她的房间吗？",
+                answer: [
+                    { text: "不会，那是侵犯隐私。", score: 0 },
+                    { text: "想过但没做。", score: 1 },
+                    { text: "在他允许的情况下会。", score: 2 },
+                    { text: "已经配了一把，偶尔用。", score: 3 },
+                    { text: "我不仅配了钥匙，还换了锁，只有我能开。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信“死后的世界”里仍然可以相爱吗？",
+                answer: [
+                    { text: "不信，人死如灯灭。", score: 0 },
+                    { text: "希望有，但不执着。", score: 1 },
+                    { text: "觉得有可能。", score: 2 },
+                    { text: "坚信，并且已经和恋人约定了暗号。", score: 3 },
+                    { text: "我已经杀死了他，现在我们在那边很幸福。", score: 4 }
+                ]
+            },
+            {
+                question: "你会在恋人的食物或饮料里加“奇怪的东西”来让他/她更依赖你吗？",
+                answer: [
+                    { text: "绝对不会。", score: 0 },
+                    { text: "想过，但没实施。", score: 1 },
+                    { text: "加过维生素之类无害的东西。", score: 2 },
+                    { text: "加过安眠药或镇静剂。", score: 3 },
+                    { text: "我加了诅咒之血，他现在只听我的话。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经因为恋人没有及时回复消息而砸过东西吗？",
+                answer: [
+                    { text: "没有，完全可以理解。", score: 0 },
+                    { text: "心里生气，但没砸。", score: 1 },
+                    { text: "砸过枕头之类软的东西。", score: 2 },
+                    { text: "砸过贵重物品。", score: 3 },
+                    { text: "我砸了他的手机，然后买了一模一样的，里面装了定位器。", score: 4 }
+                ]
+            },
+            {
+                question: "你会在梦里杀死伤害过你的人，然后笑着醒来吗？",
+                answer: [
+                    { text: "从没做过这种梦。", score: 0 },
+                    { text: "有过，但很害怕。", score: 1 },
+                    { text: "偶尔，觉得解压。", score: 2 },
+                    { text: "经常做，醒来很满足。", score: 3 },
+                    { text: "那不是梦，是回忆。", score: 4 }
+                ]
+            },
+            {
+                question: "你如何看待“病娇”这个词？",
+                answer: [
+                    { text: "一种危险的病态心理。", score: 0 },
+                    { text: "动漫里的夸张设定。", score: 1 },
+                    { text: "有点可爱，但现实不行。", score: 2 },
+                    { text: "是我的理想状态。", score: 3 },
+                    { text: "我就是定义本身。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人夸奖别人一句而记恨那个人很久吗？",
+                answer: [
+                    { text: "不会，我很大方。", score: 0 },
+                    { text: "有点不舒服，但很快忘了。", score: 1 },
+                    { text: "会记几天。", score: 2 },
+                    { text: "会记几个月，并找机会报复。", score: 3 },
+                    { text: "那个人已经“意外”退学了。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经在恋人不知情的情况下，闻过他/她穿过的衣服吗？",
+                answer: [
+                    { text: "没有，太变态了。", score: 0 },
+                    { text: "有一次，很好奇。", score: 1 },
+                    { text: "偶尔，特别是他不在时。", score: 2 },
+                    { text: "经常，我需要他的味道才能入睡。", score: 3 },
+                    { text: "我收集了他所有的旧衣服，建了一个“气味室”。", score: 4 }
+                ]
+            },
+            {
+                question: "如果你发现恋人有前任，你会想见见那个人吗？",
+                answer: [
+                    { text: "不想，过去与我无关。", score: 0 },
+                    { text: "有点好奇，但不会去找。", score: 1 },
+                    { text: "会偷偷看对方的社交账号。", score: 2 },
+                    { text: "会想办法接近并观察。", score: 3 },
+                    { text: "我已经毁掉了他/她的生活。", score: 4 }
+                ]
+            },
+            {
+                question: "你会在恋人洗澡时，偷偷翻看他/她的手机吗？",
+                answer: [
+                    { text: "不会，尊重隐私。", score: 0 },
+                    { text: "想过但没做。", score: 1 },
+                    { text: "偶尔，如果觉得可疑。", score: 2 },
+                    { text: "每次洗澡都会翻。", score: 3 },
+                    { text: "我装了屏幕镜像，他看什么我都知道。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否曾经为了引起恋人的注意而假装受伤或生病？",
+                answer: [
+                    { text: "没有，不屑于这样做。", score: 0 },
+                    { text: "小时候做过。", score: 1 },
+                    { text: "偶尔夸大一下症状。", score: 2 },
+                    { text: "经常，而且很有效。", score: 3 },
+                    { text: "我割伤自己，然后让他帮我包扎，每次他都更心疼我。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信世界上有能让人爱上你的魔药吗？如果真有，你会下吗？",
+                answer: [
+                    { text: "不信，也不会下。", score: 0 },
+                    { text: "可能好奇，但不会用。", score: 1 },
+                    { text: "如果无害，可以试试。", score: 2 },
+                    { text: "会，只要他爱我，用什么手段都可以。", score: 3 },
+                    { text: "我已经下过了，他现在像个木偶，我很满意。", score: 4 }
+                ]
+            },
+            {
+                question: "你会在恋人睡着后，盯着他/她的脸看很久吗？",
+                answer: [
+                    { text: "不会，我也睡了。", score: 0 },
+                    { text: "偶尔看一眼。", score: 1 },
+                    { text: "会看一会儿，觉得幸福。", score: 2 },
+                    { text: "经常看到天亮。", score: 3 },
+                    { text: "我会在他眼皮上画眼睛，这样他看起来是睁着眼的。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经对恋人说过“如果你离开我，我就死给你看”吗？",
+                answer: [
+                    { text: "没有，太极端。", score: 0 },
+                    { text: "开玩笑说过。", score: 1 },
+                    { text: "吵架时说过气话。", score: 2 },
+                    { text: "认真说过，而且准备了工具。", score: 3 },
+                    { text: "我做过，他回来救我了，从此不敢提分手。", score: 4 }
+                ]
+            },
+            {
+                question: "你会故意在恋人的社交圈子里散布“我们感情很好，第三者勿扰”的暗示吗？",
+                answer: [
+                    { text: "不会，顺其自然。", score: 0 },
+                    { text: "无意中会秀恩爱。", score: 1 },
+                    { text: "偶尔会暗示主权。", score: 2 },
+                    { text: "经常发合影并配文“谁敢动我的人”。", score: 3 },
+                    { text: "我给每个异性好友都发了警告私信。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经因为梦见恋人和别人在一起，而醒来后对他/她发脾气吗？",
+                answer: [
+                    { text: "没有，梦是梦。", score: 0 },
+                    { text: "有过一次，但很快道歉。", score: 1 },
+                    { text: "偶尔会，有点小情绪。", score: 2 },
+                    { text: "经常，而且会冷战。", score: 3 },
+                    { text: "我会根据梦的内容“惩罚”他，比如锁在房间里一天。", score: 4 }
+                ]
+            },
+            {
+                question: "你会为了和恋人“永远在一起”而考虑过同归于尽吗？",
+                answer: [
+                    { text: "从来没有，生命可贵。", score: 0 },
+                    { text: "有过消极念头，但没当真。", score: 1 },
+                    { text: "觉得那是浪漫的极端。", score: 2 },
+                    { text: "认真计划过。", score: 3 },
+                    { text: "绳子已经买好了，就差选日子。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“他的血和我的血混在一起，就再也不会分开”的想法？",
+                answer: [
+                    { text: "没有，太中二了。", score: 0 },
+                    { text: "小说里看到过。", score: 1 },
+                    { text: "幻想过，觉得神秘。", score: 2 },
+                    { text: "偷偷试过，用针扎手指。", score: 3 },
+                    { text: "我用刀划过他的手臂，把我的血抹上去，然后我们歃血为盟。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人没有在朋友圈发你的照片而生气吗？",
+                answer: [
+                    { text: "不会，隐私很重要。", score: 0 },
+                    { text: "有点小失落。", score: 1 },
+                    { text: "会暗示他发。", score: 2 },
+                    { text: "会生气，并且要求他立刻发。", score: 3 },
+                    { text: "我会用他的账号自己发，然后删掉所有异性评论。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经偷偷扔掉过恋人喜欢的、但你不喜欢的东西（比如前任送的礼物）吗？",
+                answer: [
+                    { text: "不会，那是他的选择。", score: 0 },
+                    { text: "想过但没做。", score: 1 },
+                    { text: "会藏起来。", score: 2 },
+                    { text: "会扔掉，然后说丢了。", score: 3 },
+                    { text: "我会当着面烧掉，然后说“现在只有我了”。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信“诅咒人偶”真的能伤害你讨厌的人吗？",
+                answer: [
+                    { text: "不信，纯属迷信。", score: 0 },
+                    { text: "有点信，但不敢试。", score: 1 },
+                    { text: "试过，但没效果。", score: 2 },
+                    { text: "试过，然后那个人真的倒霉了。", score: 3 },
+                    { text: "我做了好几个，他们都死了。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人和其他人单独吃饭而跟踪他们吗？",
+                answer: [
+                    { text: "不会，信任对方。", score: 0 },
+                    { text: "会问清楚，但不跟踪。", score: 1 },
+                    { text: "偶尔会偷偷看一眼。", score: 2 },
+                    { text: "经常跟踪，并录音。", score: 3 },
+                    { text: "我会坐在他们隔壁桌，戴着帽子和口罩。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“如果不能在一起，就一起死”的约定？",
+                answer: [
+                    { text: "没有，太疯狂。", score: 0 },
+                    { text: "开玩笑提过。", score: 1 },
+                    { text: "认真讨论过。", score: 2 },
+                    { text: "已经写下了遗书。", score: 3 },
+                    { text: "我们拉钩了，而且准备了绳子。", score: 4 }
+                ]
+            },
+            {
+                question: "你会在恋人睡着后，用口红在他/她身上写“我的”吗？",
+                answer: [
+                    { text: "不会，太幼稚了。", score: 0 },
+                    { text: "做过一次，觉得好玩。", score: 1 },
+                    { text: "偶尔会，尤其是他惹我生气时。", score: 2 },
+                    { text: "每次他睡着都写，而且越写越大。", score: 3 },
+                    { text: "我用刀刻过，这样永远洗不掉。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经对恋人说“你的世界只能有我一个人”吗？",
+                answer: [
+                    { text: "没有，尊重他的社交。", score: 0 },
+                    { text: "撒娇时说过。", score: 1 },
+                    { text: "认真说过，他也答应了。", score: 2 },
+                    { text: "每天都说，并且检查他有没有做到。", score: 3 },
+                    { text: "我已经切断了所有他朋友的电话和网络。", score: 4 }
+                ]
+            },
+            {
+                question: "你会在下雨天故意不带伞，然后让恋人来接你吗？即使你可以自己打伞。",
+                answer: [
+                    { text: "不会，自己可以解决。", score: 0 },
+                    { text: "偶尔撒娇。", score: 1 },
+                    { text: "经常这样做。", score: 2 },
+                    { text: "每次都这样，如果他不来我会生气。", score: 3 },
+                    { text: "我会把伞藏起来，然后在他来接我之前淋雨发烧，让他内疚。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信灵魂转世后，你依然能找到他/她吗？",
+                answer: [
+                    { text: "不信，没有来世。", score: 0 },
+                    { text: "希望有，但不强求。", score: 1 },
+                    { text: "相信，并且约定了信物。", score: 2 },
+                    { text: "深信不疑，已经在研究转世追踪术。", score: 3 },
+                    { text: "我们决定同时自杀，这样就能一起转世。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人做了你不喜欢的事，而惩罚他/她（比如冷战、不让睡觉）吗？",
+                answer: [
+                    { text: "不会，沟通解决。", score: 0 },
+                    { text: "会有小情绪，但很快好。", score: 1 },
+                    { text: "会冷战时。", score: 2 },
+                    { text: "会制定惩罚规则，比如做家务。", score: 3 },
+                    { text: "我会把他关在衣柜里一小时，让他反省。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经对着恋人的照片自慰过吗？",
+                answer: [
+                    { text: "没有，那太过了。", score: 0 },
+                    { text: "没有，但想象过。", score: 1 },
+                    { text: "有过一两次。", score: 2 },
+                    { text: "经常，并且会打印新照片。", score: 3 },
+                    { text: "我会把照片放在枕头下，每晚都这样。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“如果他背叛我，我就毁了他最在乎的东西”的想法？",
+                answer: [
+                    { text: "没有，和平分手。", score: 0 },
+                    { text: "想过，但知道不对。", score: 1 },
+                    { text: "有过，但只是气话。", score: 2 },
+                    { text: "认真考虑过，比如毁他的事业。", score: 3 },
+                    { text: "我已经备份了他的所有黑料。", score: 4 }
+                ]
+            },
+            {
+                question: "你会偷偷在恋人的包里放一个追踪器吗？",
+                answer: [
+                    { text: "不会，那是犯罪。", score: 0 },
+                    { text: "想过但没做。", score: 1 },
+                    { text: "用过一次，觉得不放心。", score: 2 },
+                    { text: "一直在用，他每天的行踪我都知道。", score: 3 },
+                    { text: "我甚至在他的车里装了窃听器。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信血月之夜许愿会成真吗？你想许什么愿？",
+                answer: [
+                    { text: "不信，那是自然现象。", score: 0 },
+                    { text: "许过普通愿望。", score: 1 },
+                    { text: "许过关于恋人的愿望。", score: 2 },
+                    { text: "许过“让他永远只爱我”的愿望。", score: 3 },
+                    { text: "我在血月之夜献祭了一只黑猫，现在他每天都会做噩梦，梦里只有我。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人忘记纪念日而大发雷霆吗？",
+                answer: [
+                    { text: "不会，偶尔忘记很正常。", score: 0 },
+                    { text: "有点失望，但不会发火。", score: 1 },
+                    { text: "会生气，要求补偿。", score: 2 },
+                    { text: "会冷战好几天。", score: 3 },
+                    { text: "我会把那天从日历上划掉，以后不过了，然后一直记恨。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经试图用催眠术或心理暗示来改变恋人的想法吗？",
+                answer: [
+                    { text: "没有，那是操纵。", score: 0 },
+                    { text: "看过教程，没试过。", score: 1 },
+                    { text: "试过，但没成功。", score: 2 },
+                    { text: "成功了，他现在一些小事会听我的。", score: 3 },
+                    { text: "我每天都在他半梦半醒时低语“你只爱我”，他现在完全依赖我了。", score: 4 }
+                ]
+            },
+            {
+                question: "你会在恋人的枕头上滴自己的血，以“加强羁绊”吗？",
+                answer: [
+                    { text: "不会，莫名其妙。", score: 0 },
+                    { text: "没想过。", score: 1 },
+                    { text: "好奇，但没做。", score: 2 },
+                    { text: "做过一次，觉得浪漫。", score: 3 },
+                    { text: "我每周都做，他的枕头已经泛红了。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“如果我是他/她的影子就好了，永远不分开”的想法？",
+                answer: [
+                    { text: "没有，我是独立的人。", score: 0 },
+                    { text: "偶尔浪漫幻想。", score: 1 },
+                    { text: "有过，觉得很凄美。", score: 2 },
+                    { text: "经常想，希望变成他的一部分。", score: 3 },
+                    { text: "我试图把他的影子剪下来，缝在自己的影子上。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人没有秒回消息而连续发几十条消息轰炸吗？",
+                answer: [
+                    { text: "不会，他可能在忙。", score: 0 },
+                    { text: "会发一条提醒。", score: 1 },
+                    { text: "会发几条，但不会过火。", score: 2 },
+                    { text: "经常轰炸，直到他回复。", score: 3 },
+                    { text: "我会直接打电话，如果他没接，我就打给他所有朋友。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经用恋人的名字和生日做过诅咒娃娃吗？",
+                answer: [
+                    { text: "没有，没听说过。", score: 0 },
+                    { text: "听过，但觉得无聊。", score: 1 },
+                    { text: "做过，但只是想试试。", score: 2 },
+                    { text: "做过，并且扎了针，希望他更爱我。", score: 3 },
+                    { text: "我做了两个，一个让他爱我，一个让他害怕失去我。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人夸了别人的宠物而嫉妒那只宠物吗？",
+                answer: [
+                    { text: "不会，宠物而已。", score: 0 },
+                    { text: "有点小吃醋。", score: 1 },
+                    { text: "会，我希望他只夸我。", score: 2 },
+                    { text: "会记恨那只宠物。", score: 3 },
+                    { text: "那只宠物“走丢”了。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“爱到极致就会想吃了对方”的想法？",
+                answer: [
+                    { text: "没有，那太变态了。", score: 0 },
+                    { text: "听过这种说法，但不认同。", score: 1 },
+                    { text: "觉得是文学修辞。", score: 2 },
+                    { text: "认真想过，觉得那样就能永远合一。", score: 3 },
+                    { text: "我已经尝过他的血了，下一步就是肉。", score: 4 }
+                ]
+            },
+            {
+                question: "你会偷偷拍下恋人的睡颜，并设置成手机屏保吗？",
+                answer: [
+                    { text: "不会，未经允许。", score: 0 },
+                    { text: "会，但会问一下。", score: 1 },
+                    { text: "会，觉得可爱。", score: 2 },
+                    { text: "经常，而且会打印出来。", score: 3 },
+                    { text: "我会拍下所有角度，包括他流口水的样子，然后在梦里看。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信“如果相爱的人互相喝下对方的血，就永远不会分离”吗？",
+                answer: [
+                    { text: "不信，伪科学。", score: 0 },
+                    { text: "有点浪漫，但不会做。", score: 1 },
+                    { text: "如果恋人也愿意，可以试试。", score: 2 },
+                    { text: "已经试过了，感觉更强了。", score: 3 },
+                    { text: "我偷偷混在他的饮料里，他不知道，但我们永远不会分开了。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人对服务员微笑而生气吗？",
+                answer: [
+                    { text: "不会，那是礼貌。", score: 0 },
+                    { text: "有点酸，但理解。", score: 1 },
+                    { text: "会不开心，让他下次注意。", score: 2 },
+                    { text: "会当场甩脸色。", score: 3 },
+                    { text: "我会找到那个服务员，警告他离我的人远点。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经对着恋人的名字反复书写，直到写满整张纸吗？",
+                answer: [
+                    { text: "没有，太闲了。", score: 0 },
+                    { text: "上课无聊时写过。", score: 1 },
+                    { text: "偶尔会，觉得甜蜜。", score: 2 },
+                    { text: "经常，而且会用红笔。", score: 3 },
+                    { text: "我用刀刻在桌子上、墙上、手臂上。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“如果他死了，我就把他的器官保存起来，每天拥抱”的想法？",
+                answer: [
+                    { text: "没有，太疯狂。", score: 0 },
+                    { text: "没有，但看过恐怖片有类似情节。", score: 1 },
+                    { text: "觉得那是终极占有。", score: 2 },
+                    { text: "认真想过，并且查过防腐方法。", score: 3 },
+                    { text: "我已经买好了福尔马林和玻璃罐。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人忘记了你的生日而选择不告诉他，然后默默记恨一年吗？",
+                answer: [
+                    { text: "不会，我会提醒他。", score: 0 },
+                    { text: "会有点难过，但会说出来。", score: 1 },
+                    { text: "会暗示，如果还不记得就生气。", score: 2 },
+                    { text: "会不告诉他，然后等他下次生日也不祝福。", score: 3 },
+                    { text: "我会在一年后的同一天“消失”，让他尝尝失去的滋味。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信通过灵媒可以联系到死去的爱人吗？",
+                answer: [
+                    { text: "不信，都是骗子。", score: 0 },
+                    { text: "半信半疑。", score: 1 },
+                    { text: "想试但不敢。", score: 2 },
+                    { text: "试过，感觉听到了。", score: 3 },
+                    { text: "我每天都在和死去的他对话，他让我杀了现在这个“替身”。", score: 4 }
+                ]
+            },
+            {
+                question: "你会故意在恋人面前哭泣，来换取他/她的愧疚和关注吗？",
+                answer: [
+                    { text: "不会，我不擅长演戏。", score: 0 },
+                    { text: "真伤心时才会哭。", score: 1 },
+                    { text: "偶尔会放大情绪。", score: 2 },
+                    { text: "经常，而且知道什么时候哭最有效。", score: 3 },
+                    { text: "我会用眼药水或洋葱，确保每次都哭得恰到好处。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“把他锁在地下室，每天只能见到我一个人，他最终会爱上我”的计划？",
+                answer: [
+                    { text: "没有，那是犯罪。", score: 0 },
+                    { text: "在小说里看过。", score: 1 },
+                    { text: "有过一闪而过的念头。", score: 2 },
+                    { text: "认真计划过，包括食物、水和隔音。", score: 3 },
+                    { text: "地下室已经装修好了，就差人了。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人穿了别人送的衣服而立刻让他脱下来扔掉吗？",
+                answer: [
+                    { text: "不会，那只是衣服。", score: 0 },
+                    { text: "心里不舒服，但不会说。", score: 1 },
+                    { text: "会要求他少穿。", score: 2 },
+                    { text: "会当场让他脱掉，并烧掉。", score: 3 },
+                    { text: "我会找到送衣服的人，让他/她付出代价。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经在梦里杀死过恋人，醒来后却觉得甜蜜吗？",
+                answer: [
+                    { text: "没有，太可怕了。", score: 0 },
+                    { text: "没有，但做过噩梦。", score: 1 },
+                    { text: "有过，吓醒了。", score: 2 },
+                    { text: "有过，醒来后想再接着做那个梦。", score: 3 },
+                    { text: "那不是梦，是预演。", score: 4 }
+                ]
+            },
+            {
+                question: "你会偷偷在恋人的水杯里放一点自己的眼泪，认为这样能让他更心疼你吗？",
+                answer: [
+                    { text: "不会，太矫情。", score: 0 },
+                    { text: "没想过。", score: 1 },
+                    { text: "做过一次，觉得神秘。", score: 2 },
+                    { text: "经常，而且会念咒语。", score: 3 },
+                    { text: "我用我的血代替眼泪，他现在身上流着我的印记。", score: 4 }
+                ]
+            },
+            {
+                question: "如果恋人提出分手，你会要求“最后一次约会”，然后把他带到偏远的地方吗？",
+                answer: [
+                    { text: "不会，和平分手。", score: 0 },
+                    { text: "会，但只是谈心。", score: 1 },
+                    { text: "会，想挽回。", score: 2 },
+                    { text: "会，并且准备了“惊喜”。", score: 3 },
+                    { text: "我已经选好了地点和工具。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信“照片里的眼睛会动”这种灵异说法吗？",
+                answer: [
+                    { text: "不信，封建迷信。", score: 0 },
+                    { text: "有点毛骨悚然，但觉得是幻觉。", score: 1 },
+                    { text: "相信，并且不敢看旧照片。", score: 2 },
+                    { text: "相信，而且我故意盯着看，希望它动。", score: 3 },
+                    { text: "我拍的照片里，恋人的眼睛真的会看向我。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人和闺蜜/兄弟关系太好而吃醋，并试图离间他们吗？",
+                answer: [
+                    { text: "不会，朋友很重要。", score: 0 },
+                    { text: "有点嫉妒，但不会行动。", score: 1 },
+                    { text: "会暗示恋人保持距离。", score: 2 },
+                    { text: "会故意制造误会。", score: 3 },
+                    { text: "我已经成功让他的闺蜜/兄弟主动远离他了。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经在恋人的枕头下放一张写满“你是我的”的纸条吗？",
+                answer: [
+                    { text: "没有，太幼稚。", score: 0 },
+                    { text: "没有，但觉得浪漫。", score: 1 },
+                    { text: "做过一次，他发现了但没在意。", score: 2 },
+                    { text: "经常放，而且会用红字。", score: 3 },
+                    { text: "我会放在他的钱包、车里、办公室抽屉。", score: 4 }
+                ]
+            },
+            {
+                question: "你有收集过恋人的汗水（比如运动后的毛巾）吗？",
+                answer: [
+                    { text: "没有，恶心。", score: 0 },
+                    { text: "没有，但想象过味道。", score: 1 },
+                    { text: "闻过，但没收集。", score: 2 },
+                    { text: "收集过，密封保存。", score: 3 },
+                    { text: "我用他的汗水做了香水，每天喷在自己身上。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信“诅咒信”这种东西吗？如果收到一封诅咒信，让你转发，否则恋人会出事，你会转发吗？",
+                answer: [
+                    { text: "不信，直接删掉。", score: 0 },
+                    { text: "有点怕，但不会转发。", score: 1 },
+                    { text: "会转发给陌生人。", score: 2 },
+                    { text: "会转发给讨厌的人。", score: 3 },
+                    { text: "我会自己编一封，寄给情敌。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人忘记带手机而焦虑不安，觉得他是在故意躲你吗？",
+                answer: [
+                    { text: "不会，忘带很正常。", score: 0 },
+                    { text: "会有点担心，但不会多想。", score: 1 },
+                    { text: "会打电话给他朋友确认。", score: 2 },
+                    { text: "会一直打到他接为止。", score: 3 },
+                    { text: "我会直接去他公司/学校找他。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经在自己的手臂上刻过恋人的名字或首字母吗？",
+                answer: [
+                    { text: "没有，自残不好。", score: 0 },
+                    { text: "没有，但画过。", score: 1 },
+                    { text: "用过纹身贴。", score: 2 },
+                    { text: "用针刺过，但很浅。", score: 3 },
+                    { text: "我用刀刻的，现在疤痕很明显，他每次看到都会内疚。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“如果他敢提分手，我就毁了他的前途”的念头？",
+                answer: [
+                    { text: "没有，好聚好散。", score: 0 },
+                    { text: "想过，但只是气话。", score: 1 },
+                    { text: "有过，并且知道怎么做。", score: 2 },
+                    { text: "经常想，并且备份了证据。", score: 3 },
+                    { text: "我已经准备好了举报材料，就等他开口。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人夸赞某个明星好看，而开始讨厌那个明星吗？",
+                answer: [
+                    { text: "不会，明星离我太远。", score: 0 },
+                    { text: "有点酸，但无所谓。", score: 1 },
+                    { text: "会，并且不再看那个明星的作品。", score: 2 },
+                    { text: "会，并且会搜索那个明星的黑料。", score: 3 },
+                    { text: "我会画个圈诅咒那个明星。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信在午夜将恋人的照片泡在红酒里，然后喝掉，就能让他爱上你吗？",
+                answer: [
+                    { text: "不信，太荒谬。", score: 0 },
+                    { text: "听说过，但觉得恶心。", score: 1 },
+                    { text: "好奇，想试但不敢。", score: 2 },
+                    { text: "试过，感觉没用。", score: 3 },
+                    { text: "试过，然后他真的开始更粘我了。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人不让你看他的手机而生气，并强行抢夺吗？",
+                answer: [
+                    { text: "不会，尊重隐私。", score: 0 },
+                    { text: "会沟通，但不会抢。", score: 1 },
+                    { text: "会趁他不注意偷看。", score: 2 },
+                    { text: "会生气，冷战。", score: 3 },
+                    { text: "我会抢过来，如果他反抗，我会威胁分手。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经试过在满月之夜，用恋人的头发和红绳绑在一起，以求永不分离吗？",
+                answer: [
+                    { text: "没有，没听说过。", score: 0 },
+                    { text: "没有，但觉得神秘。", score: 1 },
+                    { text: "做过一次，悄悄试了。", score: 2 },
+                    { text: "经常，并且会念咒。", score: 3 },
+                    { text: "我不仅绑了，还埋在了十字路口。", score: 4 }
+                ]
+            },
+            {
+                question: "如果恋人因为你太可怕而提出分手，你会说“是你逼我的”然后做什么？",
+                answer: [
+                    { text: "我会放手并反思。", score: 0 },
+                    { text: "我会哭着求他再给一次机会。", score: 1 },
+                    { text: "我会威胁自杀。", score: 2 },
+                    { text: "我会威胁伤害他。", score: 3 },
+                    { text: "我会立刻执行“最终计划”。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经在梦里和恋人举行过婚礼，醒来后发现枕头湿了吗？",
+                answer: [
+                    { text: "没有，没做过这种梦。", score: 0 },
+                    { text: "做过，觉得甜蜜。", score: 1 },
+                    { text: "做过，醒来很失落。", score: 2 },
+                    { text: "经常做，醒来会哭。", score: 3 },
+                    { text: "那不是梦，是“那边”的婚礼，我很快会过去。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人没有按照你希望的方式回应你，而故意失踪几小时来测试他的反应吗？",
+                answer: [
+                    { text: "不会，我不测试人心。", score: 0 },
+                    { text: "偶尔会不接电话。", score: 1 },
+                    { text: "会，想看他急不急着找我。", score: 2 },
+                    { text: "经常，而且会关掉手机。", score: 3 },
+                    { text: "我会失踪三天，然后出现在医院，说是为他自杀未遂。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信通过吃掉恋人的胎盘可以永远连接彼此吗？",
+                answer: [
+                    { text: "不信，太恶心。", score: 0 },
+                    { text: "没听说过。", score: 1 },
+                    { text: "听过，但觉得是邪教。", score: 2 },
+                    { text: "有点信，如果对方愿意可以试。", score: 3 },
+                    { text: "我已经找黑市买了一个。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人忘了你的喜好而故意点他讨厌的菜，然后看他反应吗？",
+                answer: [
+                    { text: "不会，我会直接说。", score: 0 },
+                    { text: "偶尔会小测试。", score: 1 },
+                    { text: "会，想看他有没有用心。", score: 2 },
+                    { text: "经常，并且会生气。", score: 3 },
+                    { text: "我会在他咖啡里加他过敏的东西，然后看他是否记得自己有过敏。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“把恋人的眼睛挖出来，这样他/她就只能看我了”的念头？",
+                answer: [
+                    { text: "没有，太残忍。", score: 0 },
+                    { text: "没有，但恐怖片里见过。", score: 1 },
+                    { text: "有过一闪而过。", score: 2 },
+                    { text: "认真想过，觉得那样他就不会看别人了。", score: 3 },
+                    { text: "我已经在练习手术手法了。", score: 4 }
+                ]
+            },
+            {
+                question: "你会在恋人的生日上送他一个和你一模一样的娃娃，暗示他是你的复制品吗？",
+                answer: [
+                    { text: "不会，太诡异。", score: 0 },
+                    { text: "不会，但觉得有趣。", score: 1 },
+                    { text: "可能会开玩笑送。", score: 2 },
+                    { text: "会，而且娃娃的眼睛会动。", score: 3 },
+                    { text: "我送了一个用他头发和我的血做的娃娃，他不敢不放在床头。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经因为恋人对你撒谎（即使是小事）而想过要“教育”他吗？",
+                answer: [
+                    { text: "不会，沟通就好。", score: 0 },
+                    { text: "会生气，但很快原谅。", score: 1 },
+                    { text: "会冷战。", score: 2 },
+                    { text: "会惩罚，比如不让他出门。", score: 3 },
+                    { text: "我会让他跪着道歉，直到我满意。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信“爱情蛊”这种东西存在吗？如果存在，你会下吗？",
+                answer: [
+                    { text: "不信，也不下。", score: 0 },
+                    { text: "半信半疑，不敢试。", score: 1 },
+                    { text: "想试，但没渠道。", score: 2 },
+                    { text: "会，只要他爱我，什么都行。", score: 3 },
+                    { text: "我已经下了，他现在没有我就头痛欲裂。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人帮助了异性同事而跟踪他们，确认有没有暧昧吗？",
+                answer: [
+                    { text: "不会，我相信他。", score: 0 },
+                    { text: "会问一下，但不会跟踪。", score: 1 },
+                    { text: "偶尔会偷偷看。", score: 2 },
+                    { text: "经常跟踪，并拍照。", score: 3 },
+                    { text: "我会假装偶遇，然后对那个异性说“他是我的人”。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经在恋人睡着后，用他的指纹解锁手机，然后删掉所有异性聊天记录吗？",
+                answer: [
+                    { text: "没有，隐私很重要。", score: 0 },
+                    { text: "想过但没做。", score: 1 },
+                    { text: "做过一次，删了可疑的。", score: 2 },
+                    { text: "经常，而且会备份。", score: 3 },
+                    { text: "我会把手机内容全部克隆到我的设备上，实时监控。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“如果下辈子变成他/她的宠物，就能被他/她爱一辈子”的想法？",
+                answer: [
+                    { text: "没有，我是人。", score: 0 },
+                    { text: "有过，觉得宠物很幸福。", score: 1 },
+                    { text: "想过，但不现实。", score: 2 },
+                    { text: "经常想，希望下辈子能实现。", score: 3 },
+                    { text: "我已经开始学猫叫了，他每次听到都会笑。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人不愿意和你穿情侣装而生气，并强行让他穿吗？",
+                answer: [
+                    { text: "不会，尊重个人风格。", score: 0 },
+                    { text: "会建议，但不强求。", score: 1 },
+                    { text: "会撒娇要求。", score: 2 },
+                    { text: "会生气，直到他同意。", score: 3 },
+                    { text: "我会买一摸一样的衣服，然后把他原来的衣服都扔掉。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经在恋人不知情的情况下，拍下他的裸照作为“把柄”吗？",
+                answer: [
+                    { text: "没有，那是违法。", score: 0 },
+                    { text: "没有，但想过。", score: 1 },
+                    { text: "拍过，但只是自己看。", score: 2 },
+                    { text: "拍过，并且存了多个备份。", score: 3 },
+                    { text: "我会在他睡着时拍，然后告诉他如果你离开我，这些照片就会公开。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信“死后的世界”里，你可以永远占有恋人的灵魂吗？",
+                answer: [
+                    { text: "不信，人死如灯灭。", score: 0 },
+                    { text: "希望有，但不确定。", score: 1 },
+                    { text: "相信，并且已经约定了死后暗号。", score: 2 },
+                    { text: "深信不疑，准备一起殉情。", score: 3 },
+                    { text: "我已经杀了他，现在他的鬼魂每晚陪我。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人没有在社交媒体上公开你们的合照而一直耿耿于怀吗？",
+                answer: [
+                    { text: "不会，隐私选择。", score: 0 },
+                    { text: "会有点在意，但不会说。", score: 1 },
+                    { text: "会暗示他发。", score: 2 },
+                    { text: "会生气，要求他发。", score: 3 },
+                    { text: "我会用他的账号自己发，并置顶。", score: 4 }
+                ]
+            },
+            {
+                question: "你是否有过“把他的牙齿拔下来，做成项链，这样他就永远对我笑”的想法？",
+                answer: [
+                    { text: "没有，太暴力。", score: 0 },
+                    { text: "没有，但看过类似艺术品。", score: 1 },
+                    { text: "有过，觉得变态但有趣。", score: 2 },
+                    { text: "认真想过，并且查过拔牙工具。", score: 3 },
+                    { text: "我已经收集了他的乳牙（如果还有的话）和一颗智齿。", score: 4 }
+                ]
+            },
+            {
+                question: "你会因为恋人对你吼了一句而连续几天不理他，并让他猜原因吗？",
+                answer: [
+                    { text: "不会，我会说出来。", score: 0 },
+                    { text: "会冷几个小时。", score: 1 },
+                    { text: "会冷战一天。", score: 2 },
+                    { text: "会冷战好几天，直到他道歉。", score: 3 },
+                    { text: "我会搬到朋友家住，然后不接电话，让他疯找。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经对着恋人的名字念过108遍咒语，希望他永远爱你吗？",
+                answer: [
+                    { text: "没有，浪费时间。", score: 0 },
+                    { text: "没有，但念过普通祈祷。", score: 1 },
+                    { text: "念过几次，当好玩。", score: 2 },
+                    { text: "念过，而且真的有效果。", score: 3 },
+                    { text: "我每天念108遍，现在已经不需要念了，因为他的思想已经被我控制。", score: 4 }
+                ]
+            },
+            {
+                question: "如果恋人告诉你他需要一个“个人空间”，你会？",
+                answer: [
+                    { text: "尊重并给他空间。", score: 0 },
+                    { text: "理解，但会有点失落。", score: 1 },
+                    { text: "同意，但会偷偷观察。", score: 2 },
+                    { text: "不同意，觉得他是想离开我。", score: 3 },
+                    { text: "我会把他的“个人空间”装修成我的照片墙，让他无处可逃。", score: 4 }
+                ]
+            },
+            {
+                question: "你曾经在恋人洗澡时，突然关掉热水，然后听他的尖叫吗？",
+                answer: [
+                    { text: "没有，那很危险。", score: 0 },
+                    { text: "没有，但恶作剧过。", score: 1 },
+                    { text: "做过一次，觉得好笑。", score: 2 },
+                    { text: "做过，并且会在他出来后假装无辜。", score: 3 },
+                    { text: "我会关掉热水，然后锁上浴室门，让他求我。", score: 4 }
+                ]
+            },
+            {
+                question: "你相信“如果恨一个人，就在月圆之夜把他的名字写在纸上烧掉，他就会倒霉”吗？你做过吗？",
+                answer: [
+                    { text: "不信，没做过。", score: 0 },
+                    { text: "半信半疑，没敢试。", score: 1 },
+                    { text: "试过对讨厌的人，但没效果。", score: 2 },
+                    { text: "试过，然后那个人真的倒霉了。", score: 3 },
+                    { text: "我经常烧，情敌们已经换了好几波了。", score: 4 }
+                ]
+            }
+        ];
+        shuffle(dialog)
+        for(let i = 0; i < dialog.length; i++) {
+            shuffle(dialog[i].answer)
+        }
+        const ab = ['A', 'B', 'C', 'D', 'E']
+        dialog = dialog.filter((_, index) => index < 25);
+        let selects = new Array(dialog.length).fill(-1)
+        let buttons = []
+        let currentSelect = 0;
+        async function sleep(millisecond) {
+            return new Promise((resolve) => setTimeout(resolve, millisecond));
+        }
+        let ans = null;
+        function showButton(qusindex, ansindex) {
+            const but = document.createElement("button")
+            but.classList.add("select-button")
+            if (selects[qusindex] === ansindex) {
+                but.style.border = "2px solid red"
+                but.style.fontWeight = "bold"
+            }
+            but.addEventListener("click", () => {
+                selects[qusindex] = ansindex
+                for (let i = 0; i < buttons.length; i++) {
+                    buttons[i].style.border = "1px solid red"
+                    buttons[i].style.fontWeight = "normal"
+                }
+                buttons[ansindex].style.border = "2px solid red"
+                buttons[ansindex].style.fontWeight = "bold"
+            })
+            but.innerText = ab[ansindex] + ' ' + dialog[qusindex].answer[ansindex].text;
+            ans.appendChild(but)
+            buttons.push(but)
+        }
+        const root = document.getElementById("root");
+        async function doStyle() {
+            if (currentSelect === 10) {
+                const div = document.createElement("div");
+                div.style.color = "red";
+                root.appendChild(div);
+                const text = "你说的不会是假的吧(❁´◡`❁)"
+                for (let i = 0; i < text.length; i++) {
+                    div.innerText += text[i]
+                    await sleep(300)
+                }
+                await sleep(1000)
+            } else if (currentSelect === 15) {
+                let c = []
+                let co = ""
+                if (selects[14] < 3) {
+                    c = ["你怎么能不管我！", "你怎么能抛弃我！", "你是不是不爱我了！", "你是不是有别人了！", "我还是你亲爱的吗？", "你为什么要这么对我！", `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 19q-3.775 0-6.738-2.087T1 11.5q1.3-3.325 4.263-5.413T12 4t6.738 2.088T23 11.5q-1.3 3.325-4.262 5.413T12 19m-7.925 1.7q-.95-.65-1.7-1.463t-1.25-1.762l1.75-.95q.4.725 1.013 1.375t1.387 1.175zM12 17q2.875 0 5.225-1.475t3.6-4.025q-1.25-2.55-3.6-4.025T12 6T6.775 7.475t-3.6 4.025q1.25 2.55 3.6 4.025T12 17m-6.15 4.675L7.05 20q.9.375 1.9.625t2.05.325v2q-1.4-.1-2.687-.425t-2.463-.85M12 16q1.875 0 3.188-1.312T16.5 11.5t-1.312-3.187T12 7T8.813 8.313T7.5 11.5t1.313 3.188T12 16m0-1.8q-1.125 0-1.912-.788T9.3 11.5t.788-1.912T12 8.8t1.913.788t.787 1.912t-.787 1.913T12 14.2m1 8.75v-2q1.05-.075 2.05-.325t1.9-.625l1.2 1.675q-.875.45-2.3.813T13 22.95m6.925-2.25l-1.2-1.65q.775-.525 1.388-1.162t1.012-1.363l1.75.95q-.5.95-1.25 1.763t-1.7 1.462M12 11.5"/></svg>`]
+                    co = "你可真是一个心地善良的好人(❁´◡`❁)"
+                } else if (selects[14] >= 3) {
+                    c = ["你真的好变态！", "我好喜欢你~", "你不应该抛弃我！", "我已经爱上你了！", "你怎么能这样！", `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 19q-3.775 0-6.738-2.087T1 11.5q1.3-3.325 4.263-5.413T12 4t6.738 2.088T23 11.5q-1.3 3.325-4.262 5.413T12 19m-7.925 1.7q-.95-.65-1.7-1.463t-1.25-1.762l1.75-.95q.4.725 1.013 1.375t1.387 1.175zM12 17q2.875 0 5.225-1.475t3.6-4.025q-1.25-2.55-3.6-4.025T12 6T6.775 7.475t-3.6 4.025q1.25 2.55 3.6 4.025T12 17m-6.15 4.675L7.05 20q.9.375 1.9.625t2.05.325v2q-1.4-.1-2.687-.425t-2.463-.85M12 16q1.875 0 3.188-1.312T16.5 11.5t-1.312-3.187T12 7T8.813 8.313T7.5 11.5t1.313 3.188T12 16m0-1.8q-1.125 0-1.912-.788T9.3 11.5t.788-1.912T12 8.8t1.913.788t.787 1.912t-.787 1.913T12 14.2m1 8.75v-2q1.05-.075 2.05-.325t1.9-.625l1.2 1.675q-.875.45-2.3.813T13 22.95m6.925-2.25l-1.2-1.65q.775-.525 1.388-1.162t1.012-1.363l1.75.95q-.5.95-1.25 1.763t-1.7 1.462M12 11.5"/></svg>`]
+                    co = "我感觉我已经堕入爱河了(❁´◡`❁)"
+                }
+                for (let i = 0; i < 100; i++) {
+                    const div = document.createElement("div")
+                    div.style.position = "absolute"
+                    div.style.top = `${Math.random() * 96}vh`
+                    div.style.left = `${Math.random() * 90 + 2}vw`
+                    div.style.fontSize = `${Math.random() * 5 + 8}px`
+                    div.style.color = "red"
+                    div.style.fontWeight = Math.random() < 0.3 ? "bold" : "normal"
+                    div.innerHTML = c[Math.floor(Math.random() * c.length)]
+                    root.appendChild(div)
+                    await sleep(100 - i)
+                }
+                const div = document.createElement("div");
+                div.style.color = "red";
+                div.style.fontSize = "30px"
+                root.appendChild(div);
+                const text = co
+                for (let i = 0; i < text.length; i++) {
+                    div.innerText += text[i]
+                    await sleep(300)
+                }
+                await sleep(1000)
+            } else if (currentSelect === 20) {
+                const div = document.createElement("div");
+                root.appendChild(div);
+                div.style.scale = "2"
+                div.style.color = "red"
+                div.style.fontSize = "20px"
+                div.style.animation = "jump 2s"
+                div.innerHTML = '我的头好痛啊！'
+                await sleep(3000)
+            }
+        }
+        function openMessage() {
+            root.innerHTML = ""
+            const totalScore = dialog
+                .map((idx, i) => dialog[i].answer[selects[i]].score)
+                .reduce((sum, score) => sum + score, 0);
+            const wild = document.createElement("div")
+            wild.classList.add("wild-div")
+            const ask = document.createElement("div")
+            ask.style.color = "red"
+            ask.innerHTML = "你的病娇指数是："
+            wild.appendChild(ask);
+            const scoreArea = document.createElement("div")
+            scoreArea.style.fontSize = "30px"
+            scoreArea.style.fontWeight = "bold"
+            scoreArea.style.color = "red"
+            scoreArea.innerHTML = `${totalScore}`
+            wild.appendChild(scoreArea);
+            const comment = document.createElement("div")
+            comment.style.width = "90%"
+            comment.innerHTML = `
+                <div style="color: red; text-indent: 2em;">${(function () {
+                    let report = ""
+                    if (totalScore <= 30) {
+                        report = "你害怕黑暗和怪谈，内心干净。病娇指数：★☆☆☆☆\n建议：快逃，这个测试不适合你。";
+                    } else if (totalScore <= 50) {
+                        report = "你有轻微偏执，偶尔幻想恐怖场景，但理智尚存。病娇指数：★★☆☆☆\n建议：别玩灵异游戏，别收集奇怪的东西。";
+                    } else if (totalScore <= 75) {
+                        report = "你的内心住着一个细思极恐的存在。你可能已经在收集恋人的头发，或在午夜点过蜡烛。病娇指数：★★★☆☆\n警告：衣柜里的声音可能会越来越清晰。";
+                    } else if (totalScore <= 90) {
+                        report = "你离完全病娇化只差一个仪式。地下室、标本、诅咒……对你来说只是时间问题。病娇指数：★★★★☆\n警告：你的恋人如果还没逃，建议他去看心理医生。";
+                    } else {
+                        report = "你已经不是人类。镜子里的你在微笑，梳子里缠着别人的头发，锁链声是你入睡的白噪音。病娇指数：★★★★★\n结局：你终于完成了永远不会离开的“恋人”。恭喜？";
+                    }
+                    return report
+                })()
+                }</div>
+            `
+            wild.appendChild(comment);
+            root.appendChild(wild)
+        }
+        async function done() {
+            const div = document.createElement("div");
+            root.appendChild(div);
+            div.style.scale = "20"
+            div.style.color = "red"
+            div.style.animation = "scare 2s"
+            div.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 9c1.211 0 2.381.355 3.297 1.004c1.301.92 2.43 2.124 3.165 2.996c-.735.872-1.864 2.077-3.166 2.996C14.381 16.645 13.211 17 12 17s-2.382-.355-3.299-1.004C7.4 15.076 6.271 13.872 5.537 13c.734-.872 1.863-2.076 3.164-2.995C9.618 9.355 10.789 9 12 9m0-2c-1.691 0-3.242.516-4.453 1.371C4.928 10.223 3 13 3 13s1.928 2.777 4.547 4.629C8.758 18.484 10.309 19 12 19s3.242-.516 4.451-1.371C19.07 15.777 21 13 21 13s-1.93-2.777-4.549-4.629C15.242 7.516 13.691 7 12 7m0 5a1 1 0 1 0-.002 1.998A1 1 0 0 0 12 12m0 4c-1.654 0-3-1.346-3-3s1.346-3 3-3s3 1.346 3 3s-1.346 3-3 3m0-5a2 2 0 1 0 .001 4.001A2 2 0 0 0 12 11"/></svg>`
+            await sleep(2000)
+            div.style.animation = "shake 0.2s infinite"
+            await sleep(2000)
+            root.innerHTML = ""
+            const wild = document.createElement("div")
+            wild.classList.add("wild-div")
+            const ask = document.createElement("div")
+            ask.classList.add("ask-area")
+            ask.innerHTML = `你有一封检测报告，是否打开？`
+            const next = document.createElement("div")
+            next.classList.add("next-area")
+            next.innerHTML = `
+                <button class="normal-button" onclick="openMessage()">打开</button>
+            `
+            root.appendChild(wild)
+            wild.appendChild(ask)
+            wild.appendChild(next)
+        }
+        async function doing(c) {
+            if (selects[currentSelect] < 0 && c > 0) {
+                return
+            }
+            root.innerHTML = ""
+            currentSelect += c
+            await doStyle();
+            root.innerHTML = ""
+            if (currentSelect >= dialog.length) {
+                await done()
+                return
+            }
+            const wild = document.createElement("div")
+            wild.classList.add("wild-div")
+            const ask = document.createElement("div")
+            ask.classList.add("ask-area")
+            ask.innerHTML = `问：<br>${dialog[currentSelect].question}<br><span style="font-size: 8px">第 ${currentSelect + 1} 题 / 共 ${dialog.length} 题</span>`
+            ans = document.createElement("div")
+            ans.classList.add("ans-area")
+            const next = document.createElement("div")
+            next.classList.add("next-area")
+            next.innerHTML = `
+                    ${currentSelect === 0 ? '<div></div>' : '<button class="normal-button" onclick="doing(-1)">上一题</button>'}
+                    <button class="normal-button" onclick="doing(1)">${currentSelect === dialog.length - 1 ? '提交' : '下一题'}</button>
+                `
+            root.appendChild(wild)
+            wild.appendChild(ask)
+            wild.appendChild(ans)
+            wild.appendChild(next)
+            buttons = []
+            for (let i = 0; i < dialog[currentSelect].answer.length; i++) {
+                showButton(currentSelect, i)
+            }
+        }
+        async function start() {
+            root.innerHTML = "";
+            const div = document.createElement("div");
+            div.style.color = "red";
+            root.appendChild(div);
+            const text = "我会一直盯着你的！"
+            for (let i = 0; i < text.length; i++) {
+                div.innerText += text[i]
+                await sleep(300)
+            }
+            await sleep(1000)
+            await doing(0)
+        }
+        window.addEventListener("DOMContentLoaded", () => {
+            root.innerHTML = `
+                    <div class="wild-div">
+                        <div style="color: red; font-size: 18px">心理测试</div>
+                        <div style="color: red; font-size: 10px; text-align: center;">如果你有心脏病，或者是在游玩过程中感到不适，请立刻停止答题！</div>
+                        <div style="color: red; font-size: 10px; text-align: center;">共计 25 道题，从 100 题的题库里面随机抽取，选项也随机。</div>
+                        <button class="normal-button" onclick="start()">开始</button> 
+                    </div>
+                `
+        })
+    </script>
+</body>
+
+</html>
